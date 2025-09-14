@@ -1,20 +1,26 @@
-import { useState } from "react";
-import emailjs from "@emailjs/browser";
+import { useState, useRef } from "react";
+import emailjs from "emailjs-com";
 import Alert from "../components/Alert";
 import { Particles } from "../components/Particles";
+import { motion } from "motion/react";
+
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    from_name: "",
+    from_email: "",
     message: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
+
+  const formRef = useRef();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const showAlertMessage = (type, message) => {
     setAlertType(type);
     setAlertMessage(message);
@@ -23,35 +29,57 @@ const Contact = () => {
       setShowAlert(false);
     }, 5000);
   };
+
+  const validateForm = () => {
+    if (!formData.from_name.trim()) {
+      showAlertMessage("danger", "Please enter your name");
+      return false;
+    }
+    if (!formData.from_email.trim() || !formData.from_email.includes("@")) {
+      showAlertMessage("danger", "Please enter a valid email address");
+      return false;
+    }
+    if (!formData.message.trim()) {
+      showAlertMessage("danger", "Please enter your message");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     setIsLoading(true);
 
     try {
-      console.log("From submitted:", formData);
-      await emailjs.send(
-        "service_79b0nyj",
-        "template_17us8im",
-        {
-          from_name: formData.name,
-          to_name: "Ali",
-          from_email: formData.email,
-          to_email: "AliSanatiDev@gmail.com",
-          message: formData.message,
-        },
-        "pn-Bw_mS1_QQdofuV"
+      const result = await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
+
+      console.log("Email sent:", result.text);
       setIsLoading(false);
-      setFormData({ name: "", email: "", message: "" });
-      showAlertMessage("success", "You message has been sent!");
+      setFormData({ from_name: "", from_email: "", message: "" });
+      showAlertMessage("success", "Your message has been sent successfully!");
     } catch (error) {
+      console.error("EmailJS error:", error);
       setIsLoading(false);
-      console.log(error);
-      showAlertMessage("danger", "Somthing went wrong!");
+      showAlertMessage("danger", "Failed to send message. Try again later.");
     }
+    console.log("Service ID:", import.meta.env.VITE_EMAILJS_SERVICE_ID);
+console.log("Template ID:", import.meta.env.VITE_EMAILJS_TEMPLATE_ID);
+console.log("Public Key:", import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+
   };
+
   return (
-    <section className="relative flex items-center c-space section-spacing">
+    <section
+      id="contact"
+      className="relative flex items-center c-space section-spacing"
+    >
       <Particles
         className="absolute inset-0 -z-50"
         quantity={100}
@@ -60,72 +88,117 @@ const Contact = () => {
         refresh
       />
       {showAlert && <Alert type={alertType} text={alertMessage} />}
-      <div className="flex flex-col items-center justify-center max-w-md p-5 mx-auto border border-white/10 rounded-2xl bg-primary">
-        <div className="flex flex-col items-start w-full gap-5 mb-10">
+
+      <motion.div
+        className="flex flex-col items-center justify-center max-w-md p-8 mx-auto border border-white/10 rounded-2xl bg-gradient-to-br from-primary/90 to-midnight/90 backdrop-blur-sm"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
+        <motion.div
+          className="flex flex-col items-start w-full gap-5 mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           <h2 className="text-heading">Let's Talk</h2>
           <p className="font-normal text-neutral-400">
-            Whether you're loking to build a new website, improve your existing
-            platform, or bring a unique project to life, I'm here to help
+            Whether you're looking to build a new website, improve your
+            existing platform, or bring a unique project to life, I'm here to
+            help.
           </p>
-        </div>
-        <form className="w-full" onSubmit={handleSubmit}>
+        </motion.div>
+
+        {/* Contact Form */}
+        <motion.form
+          ref={formRef}
+          className="w-full"
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
           <div className="mb-5">
-            <label htmlFor="name" className="feild-label">
+            <label htmlFor="from_name" className="field-label">
               Full Name
             </label>
             <input
-              id="name"
-              name="name"
+              id="from_name"
+              name="from_name"
               type="text"
               className="field-input field-input-focus"
               placeholder="John Doe"
-              autoComplete="name"
-              value={formData.name}
+              value={formData.from_name}
               onChange={handleChange}
+              disabled={isLoading}
               required
             />
           </div>
+
           <div className="mb-5">
-            <label htmlFor="email" className="feild-label">
+            <label htmlFor="from_email" className="field-label">
               Email
             </label>
             <input
-              id="email"
-              name="email"
+              id="from_email"
+              name="from_email"
               type="email"
               className="field-input field-input-focus"
               placeholder="JohnDoe@email.com"
-              autoComplete="email"
-              value={formData.email}
+              value={formData.from_email}
               onChange={handleChange}
+              disabled={isLoading}
               required
             />
           </div>
+
           <div className="mb-5">
-            <label htmlFor="message" className="feild-label">
+            <label htmlFor="message" className="field-label">
               Message
             </label>
             <textarea
               id="message"
               name="message"
-              type="text"
               rows="4"
-              className="field-input field-input-focus"
-              placeholder="Share your thoughts..."
-              autoComplete="message"
+              className="field-input field-input-focus resize-none"
+              placeholder="Share your thoughts... "
               value={formData.message}
               onChange={handleChange}
+              disabled={isLoading}
               required
             />
           </div>
-          <button
+
+          <motion.button
             type="submit"
-            className="w-full px-1 py-3 text-lg text-center rounded-md cursor-pointer bg-radial from-lavender to-royal hover-animation"
+            className={`w-full px-6 py-4 text-lg font-medium text-center rounded-lg transition-all duration-300 ${
+              isLoading
+                ? "bg-neutral-600 cursor-not-allowed"
+                : "bg-gradient-to-r from-royal to-lavender hover:from-lavender hover:to-royal hover:scale-105 hover:shadow-lg hover:shadow-royal/25"
+            }`}
+            disabled={isLoading}
           >
-            {!isLoading ? "Send" : "Sending..."}
-          </button>
-        </form>
-      </div>
+            {isLoading ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Sending...
+              </div>
+            ) : (
+              "Send Message"
+            )}
+          </motion.button>
+        </motion.form>
+
+        <p className="mt-6 text-sm text-neutral-500">
+          Or reach me directly at{" "}
+          <a
+            href="mailto:abhisheksajwan458@gmail.com"
+            className="text-royal hover:text-lavender transition-colors"
+          >
+            abhisheksajwan458@gmail.com
+          </a>
+        </p>
+      </motion.div>
     </section>
   );
 };

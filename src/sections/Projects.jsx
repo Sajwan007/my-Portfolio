@@ -1,19 +1,19 @@
 import { useState } from "react";
 import Project from "../components/Project";
 import { myProjects } from "../constants";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
+
 const Projects = () => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { damping: 10, stiffness: 50 });
-  const springY = useSpring(y, { damping: 10, stiffness: 50 });
-  const handleMouseMove = (e) => {
-    x.set(e.clientX + 20);
-    y.set(e.clientY + 20);
-  };
   const [preview, setPreview] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    setMousePosition({ x: e.clientX + 20, y: e.clientY + 20 });
+  };
+
   return (
     <section
+      id="work"
       onMouseMove={handleMouseMove}
       className="relative c-space section-spacing"
     >
@@ -22,12 +22,21 @@ const Projects = () => {
       {myProjects.map((project) => (
         <Project key={project.id} {...project} setPreview={setPreview} />
       ))}
+      
       {preview && (
-        <motion.img
-          className="fixed top-0 left-0 z-50 object-cover h-56 rounded-lg shadow-lg pointer-events-none w-80"
-          src={preview}
-          style={{ x: springX, y: springY }}
-        />
+        <div
+          className="fixed z-50 pointer-events-none transition-all duration-200 ease-out"
+          style={{
+            left: mousePosition.x,
+            top: mousePosition.y,
+          }}
+        >
+          <img
+            className="w-48 h-32 object-cover rounded-lg shadow-lg border border-white/10"
+            src={preview}
+            alt="Project preview"
+          />
+        </div>
       )}
     </section>
   );

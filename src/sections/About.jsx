@@ -17,10 +17,18 @@ const About = () => {
             className="absolute scale-[1.75] -right-[5rem] -top-[1rem] md:scale-[3] md:left-50 md:inset-y-10 lg:scale-[2.5]"
           />
           <div className="z-10">
-            <p className="headtext">Hi, I'm Ali Sanati</p>
+            <p className="headtext">Hi, I'm Abhishek Sajwan</p>
             <p className="subtext">
-              Over the last 4 years, I developed my frontend and backend dev
-              skills to deliver dynamic and software and web applications.
+              Motivated Front-End Web Developer skilled in HTML, CSS, JavaScript, and
+              responsive design. Eager to apply my skills to real-world projects and grow in
+              collaborative, innovative environments. I enjoy adopting new technologies to
+              deliver clean, user-focused solutions.
+            </p>
+            <p className="subtext mt-2">
+              📍 Pauri Khal, Tehri Garhwal, Uttarakhand
+            </p>
+            <p className="subtext mt-2">
+              ✉️ abhisheksajwan458@gmail.com | 📞 +91 8439413201
             </p>
           </div>
           <div className="absolute inset-x-0 pointer-evets-none -bottom-4 h-1/2 sm:h-1/3 bg-gradient-to-t from-indigo" />
@@ -79,10 +87,8 @@ const About = () => {
         {/* Grid 3 */}
         <div className="grid-black-color grid-3">
           <div className="z-10 w-[50%]">
-            <p className="headtext">Time Zone</p>
-            <p className="subtext">
-              I'm based in Mars, and open to remote work worldwide
-            </p>
+            <p className="headtext">Availability</p>
+            <p className="subtext">Open to internships and full-time roles, remote or onsite.</p>
           </div>
           <figure className="absolute left-[30%] top-[10%]">
             <Globe />
@@ -100,10 +106,9 @@ const About = () => {
         {/* Grid 5 */}
         <div className="grid-default-color grid-5">
           <div className="z-10 w-[50%]">
-            <p className="headText">Teck Stack</p>
+            <p className="headText">Tech Stack</p>
             <p className="subtext">
-              I specialize in a variety of languages, frameworks, and tools taht
-              allow me to build robust and scalable applications
+              Frontend: HTML5, CSS3, JavaScript, Tailwind CSS | Backend: Node.js, Express.js, Flask (basic) | Tools: Git, GitHub, MongoDB, MySQL
             </p>
           </div>
           <div className="absolute inset-y-0 md:inset-y-9 w-full h-full start-[50%] md:scale-125">

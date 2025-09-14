@@ -1,25 +1,64 @@
 import { useState } from "react";
 import { motion } from "motion/react";
+
+const smoothScrollTo = (elementId) => {
+  const element = document.querySelector(elementId);
+  if (element) {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
+};
+
 function Navigation() {
   return (
     <ul className="nav-ul">
       <li className="nav-li">
-        <a className="nav-link" href="#home">
+        <a 
+          className="nav-link" 
+          href="#home"
+          onClick={(e) => {
+            e.preventDefault();
+            smoothScrollTo('#home');
+          }}
+        >
           Home
         </a>
       </li>
       <li className="nav-li">
-        <a className="nav-link" href="#about">
+        <a 
+          className="nav-link" 
+          href="#about"
+          onClick={(e) => {
+            e.preventDefault();
+            smoothScrollTo('#about');
+          }}
+        >
           About
         </a>
       </li>
       <li className="nav-li">
-        <a className="nav-link" href="#work">
+        <a 
+          className="nav-link" 
+          href="#work"
+          onClick={(e) => {
+            e.preventDefault();
+            smoothScrollTo('#work');
+          }}
+        >
           Work
         </a>
       </li>
       <li className="nav-li">
-        <a className="nav-link" href="#contact">
+        <a 
+          className="nav-link" 
+          href="#contact"
+          onClick={(e) => {
+            e.preventDefault();
+            smoothScrollTo('#contact');
+          }}
+        >
           Contact
         </a>
       </li>
@@ -36,7 +75,7 @@ const Navbar = () => {
             href="/"
             className="text-xl font-bold transition-colors text-neutral-400 hover:text-white"
           >
-            Ali
+            Abhishek
           </a>
           <button
             onClick={() => setIsOpen(!isOpen)}
