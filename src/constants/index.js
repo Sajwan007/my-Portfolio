@@ -75,7 +75,7 @@ export const mySocials = [
   },
   {
     name: "LinkedIn",
-    href: "linkedin.com/in/abhishek-sajwan458",
+    href: "https://linkedin.com/in/abhishek-sajwan458",
     icon: "/assets/socials/linkedIn.svg",
   },
   {
